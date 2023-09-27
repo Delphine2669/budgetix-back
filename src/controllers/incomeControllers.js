@@ -1,5 +1,4 @@
 const models = require("../models");
-
 const browse = (req, res) => {
   models.income
     .findAll()
@@ -17,7 +16,6 @@ const add = (req, res) => {
     amount: req.body.amount,
     description: req.body.description,
     date: req.body.date,
-    user_id: req.body.user_id,
   };
   models.income
     .insert(income)
@@ -29,9 +27,11 @@ const add = (req, res) => {
       res.status(500).send("error saving data from database");
     });
 };
+
 const read = (req, res) => {
+  const incomeId = parseInt(req.params.id, 10);
   models.income
-    .find(req.params.id)
+    .find(incomeId)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(404);
@@ -48,6 +48,7 @@ const read = (req, res) => {
 const edit = (req, res) => {
   const incomeId = parseInt(req.params.id, 10);
   const incomeData = req.body;
+
   models.income
     .update(incomeData, incomeId)
     .then(([result]) => {
@@ -62,9 +63,11 @@ const edit = (req, res) => {
       res.status(500).send("error editing data");
     });
 };
+
 const destroy = (req, res) => {
+  const incomeId = parseInt(req.params.id, 10);
   models.income
-    .delete(req.params.id)
+    .delete(incomeId)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
@@ -78,4 +81,10 @@ const destroy = (req, res) => {
     });
 };
 
-module.exports = { browse, read, add, edit, destroy };
+module.exports = {
+  browse,
+  read,
+  add,
+  edit,
+  destroy,
+};

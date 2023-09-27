@@ -1,5 +1,6 @@
 const models = require("../models");
-
+const UserManager = require("../models/UserManager");
+const userManager = new UserManager();
 const browse = (req, res) => {
   models.user
     .findAll()
@@ -14,9 +15,9 @@ const browse = (req, res) => {
 
 const add = (req, res) => {
   const user = {
-    name: req.body.name,
+    username: req.body.username,
     email: req.body.email,
-    password: req.body.password,
+    hashedPassword: req.body.hashedPassword,
   };
   models.user
     .insert(user)
